@@ -1,0 +1,81 @@
+﻿#pragma kernel CalNormal
+
+uint mapSize;
+float tileSize;
+float deltaTime;
+float upSpeed;
+float downSpeed;
+
+// 矢量叉乘
+float3 CrossMul(float3 x, float3 y)
+{
+	return float3(x.y * y.z - y.y * x.z, y.x * x.z - x.x * y.z, x.x * y.y - y.x * x.y);
+}
+
+// 合成法线
+float3 CalculateNormal(float3 U, float3 D, float3 L, float3 R)
+{
+	float3 Normal1 = CrossMul(U, R);
+	float3 Normal2 = CrossMul(R, D);
+	float3 Normal3 = CrossMul(D, L);
+	float3 Normal4 = CrossMul(L, U);
+
+	return normalize(normalize(Normal1) + normalize(Normal2) + normalize(Normal3) + normalize(Normal4));
+}
+
+// 计算雅可比行列式
+float Jacobian(float deltaX2DX, float deltaY2DY, float deltaX2DY, float deltaY2DX)
+{
+	float jxx = 1 + deltaX2DX;
+	float jyy = 1 + deltaY2DY;;
+	float jyx = 0 + deltaX2DY;;
+	float jxy = 0 + deltaY2DX;;
+
+	return jxx * jyy - jxy * jyx;
+}
+
+RWTexture2D<float> inputH;
+RWTexture2D<float> inputDx;
+RWTexture2D<float> inputDy;
+RWTexture2D<float2> outputNormal;
+RWTexture2D<float> foamRT;
+
+[numthreads(32, 32, 1)]
+void CalNormal(uint2 id : SV_DispatchThreadID)
+{
+	uint2 up = uint2(id.x, id.y + 1);
+	uint2 down = uint2(id.x, id.y - 1);
+	uint2 left = uint2(id.x - 1, id.y);
+	uint2 right = uint2(id.x + 1, id.y);
+
+	// 处理边界
+	up += mapSize; up %= mapSize;
+	down -= mapSize; down %= mapSize;
+	left -= mapSize; left %= mapSize;
+	right += mapSize; right %= mapSize;
+
+	float3 centerPoint = float3(inputDx[id].x, inputH[id].x, inputDy[id].x);
+	float3 upPoint = float3(inputDx[up].x, inputH[up].x, inputDy[up].x + tileSize);
+	float3 downPoint = float3(inputDx[down].x, inputH[down].x, inputDy[down].x - tileSize);
+	float3 leftPoint = float3(inputDx[left].x - tileSize, inputH[left].x, inputDy[left].x);
+	float3 rightPoint = float3(inputDx[right].x + tileSize, inputH[right].x, inputDy[right].x);
+
+	float3 vecC2U = -upPoint + centerPoint;
+	float3 vecC2D = -downPoint + centerPoint;
+	float3 vecC2L = -leftPoint + centerPoint;
+	float3 vecC2R = -rightPoint + centerPoint;
+
+	float3 normal = CalculateNormal(vecC2U, vecC2D, vecC2L, vecC2R);
+
+	outputNormal[id] = normal.xy;
+
+	// Foam 计算
+	float deltaX2DX = inputDx[right] - inputDx[id];
+	float deltaY2DY = inputDy[up] - inputDy[id];
+	float deltaX2DY = inputDy[right] - inputDy[id];
+	float deltaY2DX = inputDx[up] - inputDx[id];
+	float jacobian = Jacobian(deltaX2DX, deltaY2DY, deltaX2DY, deltaY2DX);
+
+	foamRT[id] += jacobian < 0 ? -jacobian * upSpeed * deltaTime : -jacobian * downSpeed * deltaTime;
+	foamRT[id] = clamp(foamRT[id], 0, 1);
+}
