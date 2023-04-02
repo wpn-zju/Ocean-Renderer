@@ -17,9 +17,9 @@ public class MeshGPU : MonoBehaviour
     // 网格尺寸 受限于Unity引擎网格顶点数限制 最大可取255
     public int meshSize = 128;
     // 单块网格大小
-    public float tileSize = 1;
+    public float tileSize = 8;
     // 海面网格数
-    public float seaSize = 2;
+    public float seaSize = 8;
 
     // 网格数据
     private Mesh mesh;
@@ -31,25 +31,25 @@ public class MeshGPU : MonoBehaviour
     public Material material;
 
     // 光源颜色
-    public Color lightColor = new Color(1, 0.8f, 0.6f, 1);
+    public Color lightColor = new Color(0.5f, 0.4f, 0.3f, 1);
 
     #region Foam 相关参数
     // Foam 生长速度
-    public float upSpeed;
+    public float upSpeed = 1;
     // Foam 消散速度
-    public float downSpeed;
+    public float downSpeed = 1;
     #endregion
 
     #region OceanShader 相关参数
-    public Color waterColor;
-    public float specularity;
-    public float foamSize;
-    public float fresnelPower;
+    public Color waterColor = new Color(0, 0.17f, 0.34f, 1);
+    public float specularity = 128;
+    public float foamSize = 4;
+    public float fresnelPower = 20;
     #endregion
 
     #region 波谱相关参数
     // 风速
-    public float windSpeed = 1.0f;
+    public float windSpeed = 16.0f;
     // 全局速度
     public float speed = 1.0f;
     #endregion

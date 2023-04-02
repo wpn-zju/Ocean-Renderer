@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c45f276ec1857be489f913fc542260d3
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - material: {fileID: 2100000, guid: 08b38c49c43e13c45b87c2ed6d2795ae, type: 2}
+  - shaderSpec: {fileID: 7200000, guid: 773a4197acf1d6d4789be123fd46ea44, type: 3}
+  - shaderFFT: {fileID: 7200000, guid: 457c0f950eb43624d807518f17a96c63, type: 3}
+  - shaderNormal: {fileID: 7200000, guid: 595269c5aa500be44b3c012142e49649, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

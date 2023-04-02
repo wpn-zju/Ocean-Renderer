@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: OceanGPU
-  m_Shader: {fileID: 4800000, guid: f4f74c31a48a5974abd3fcee82db92fb, type: 3}
+  m_Shader: {fileID: 4800000, guid: d5e69bd02f790f0449fbdc88167fe693, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -43,7 +43,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Foam:
-        m_Texture: {fileID: 2800000, guid: caef365a9d88d10428a63dcbd99dc7f9, type: 3}
+        m_Texture: {fileID: 2800000, guid: cca4372412abd6b40b1bbd5203e72597, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FoamBump:
@@ -160,6 +160,6 @@ Material:
     - _SunDir: {r: -0.86602545, g: -0.5000001, b: -0.00000011175871, a: 0}
     - _SurfaceColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
     - _SurfaceColorLod1: {r: 1, g: 1, b: 1, a: 1}
-    - _WaterColor: {r: 0, g: 0.16862746, b: 0.34509805, a: 1}
+    - _WaterColor: {r: 0, g: 0.17, b: 0.34, a: 1}
     - _WaterColorLod1: {r: 1, g: 1, b: 1, a: 1}
     - _WaveOffset: {r: 0, g: 0, b: 0, a: 0}
